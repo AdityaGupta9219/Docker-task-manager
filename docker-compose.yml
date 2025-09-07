@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  # MongoDB Database
+  mongo:
+    image: mongo:5.0
+    container_name: task-mongo
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - task-network
+
+  # Backend API Server
+  backend:
+    build: ./backend
+    container_name: task-backend
+    restart: unless-stopped
+    depends_on:
+      - mongo
+    environment:
+      - NODE_ENV=production
+    networks:
+      - task-network
+
+  # Frontend Web Server
+  frontend:
+    build: ./frontend
+    container_name: task-frontend
+    restart: unless-stopped
+    networks:
+      - task-network
+
+  # Nginx Reverse Proxy
+  nginx:
+    build: ./nginx
+    container_name: task-nginx
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - task-network
+
+volumes:
+  mongo_data:
+
+networks:
+  task-network:
+    driver: bridge
