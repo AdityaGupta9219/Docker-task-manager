@@ -47,7 +47,7 @@ http {
     keepalive_timeout 65;
     
     server {
-        listen ${PORT:-10000};
+        listen 8080;
         server_name _;
         
         # Health check endpoint
