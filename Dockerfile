@@ -27,7 +27,7 @@ COPY --from=backend-builder /app/backend /app/backend
 COPY --from=frontend-files /usr/share/nginx/html /app/frontend
 
 # Create nginx configuration for Railway
-RUN cat > /etc/nginx/nginx.conf << 'EOF'
+RUN <<'EOF' cat > /etc/nginx/nginx.conf
 worker_processes 1;
 pid /run/nginx.pid;
 daemon off;
@@ -47,7 +47,7 @@ http {
     }
     
     server {
-        listen $PORT;
+        listen ${PORT};
         server_name _;
         root /app/frontend;
         index index.html;
