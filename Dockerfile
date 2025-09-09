@@ -111,3 +111,16 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 EOF
+
+# Set working directory
+WORKDIR /app
+
+# Railway uses PORT environment variable (default 8080 for testing)
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Start supervisor (runs both nginx and node)
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
