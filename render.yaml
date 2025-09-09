@@ -1,25 +1,23 @@
-services:
-  - type: web
-    name: task-manager-backend
-    runtime: docker
-    dockerfilePath: ./backend/Dockerfile
-    dockerContext: ./backend
-    envVars:
-      - key: PORT
-        value: 10000
-      - key: MONGODB_URI
-        fromDatabase:
-          name: task-manager-mongo
-          property: connectionString
-    healthCheckPath: /health
-
-  - type: web
-    name: task-manager-frontend
-    runtime: docker
-    dockerfilePath: ./frontend/Dockerfile
-    dockerContext: ./frontend
-
 databases:
   - name: task-manager-mongo
     databaseName: taskmanager
     user: taskuser
+    region: ohio
+
+services:
+  - type: web
+    name: task-manager-app
+    runtime: docker
+    region: ohio
+    plan: free
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGODB_URI
+        fromDatabase:
+          name: task-manager-mongo
+          property: connectionString
+    buildCommand: ""
+    startCommand: ""

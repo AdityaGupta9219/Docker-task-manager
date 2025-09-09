@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://mongo:27017/taskmanager';
+const PORT = process.env.BACKEND_PORT || 3000;
+const MONGODB_URI = process.env.MONGODB_URI || process.env.DATABASE_URL || 'mongodb://mongo:27017/taskmanager';
 
 // Middleware
 app.use(cors());
